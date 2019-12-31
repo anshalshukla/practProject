@@ -1,0 +1,48 @@
+{% extends "Timeline/base.html" %}
+{% block content %}
+<br>
+<button style="width: 100%;background-color: black;color: white;font-size:1cm;"><a
+        style="align-items: center;color:#4CAF50;font-family: cursive;text-decoration:none;" class="active"
+        href="{% url 'feed-create'%}">COMPOSE</a></button>
+<br><br>
+<hr>
+{% for feed in feeds %}
+
+<div class="media content-section" style="padding-left: .5cm;padding-right: .5cm;">
+    <img style="float:right;" width="15%" src="{{ feed.author.profile.image.url }}">
+    <h2><a style="color: red;" href="{% url 'feed-detail' feed.id %}"><b><i>{{feed.title}}</i></b></a></h2>
+    <p>By <a href="{% url 'user-feeds' feed.author.username %}">{{feed.author}}</a> on {{feed.date_posted}}</p>
+    {% if feed.author == user %}
+
+
+    <button><a href="{% url 'feed-update' feed.id %}"> Update </a></button>
+    <button><a href="{% url 'feed-delete' feed.id %}"> Delete </a></button>
+
+    {% endif %}
+    <p>{{ feed.content }}</p>
+</div>
+
+<hr>
+{% endfor %}
+{% if is_paginated %}
+{% if page_obj.has_previous %}
+<a href="?page=1">First</a>
+<a href="?page={{page_obj.previous_page_number}}">Previous</a>
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+{% if page_obj.number == num %}
+<a href="?page={{num}}">{{num}}</a>
+{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+<a href="?page={{num}}">{{num}}</a>
+{% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number}}">Next</a>
+<a href="?page={{page_obj.paginator.num_pages}}">Last</a>
+{% endif %}
+
+{% endif %}
+
+{% endblock content %}

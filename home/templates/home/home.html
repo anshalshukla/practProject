@@ -1,0 +1,5 @@
+{% extends "home/base.html" %}
+{% block content %}
+<button><a href="{% url 'login' %}">Log In</a></button>
+<button><a href="{% url 'register' %}" type="submit">Sign Up</a></button>
+{% endblock content %}
